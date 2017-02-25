@@ -26,8 +26,9 @@
     <%= f.file_field :image, onchange: "readURL(this);" %>
   </div>
   <div>
-    <img id="img_prev" src="#" alt="your image" style="display:none;" />
+    <img id="img_prev" src="#" alt="your image" style="display:none;" size = "64x64"/>
   </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
