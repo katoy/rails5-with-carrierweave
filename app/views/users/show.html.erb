@@ -12,8 +12,8 @@
 
 <p>
   <strong>Image:</strong>
-  <%= image_tag @user.image, size: "64x64" %>
-  <div><%= @user.image.to_s %> on s3 </div>
+  <%= image_tag @user.image_url %>
+  <div><%= @user.image_url %> on s3 </div>
 </p>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |

@@ -3,6 +3,11 @@ class ImagesUploader < CarrierWave::Uploader::Base
 
   storage :fog # fog使いますよー
 
+  # thumb バージョン(width 400px x height 200px)
+  version :thumb do
+    process :resize_to_fit => [64, 64]
+  end
+
   # cash使います。
   def fog_attributes
     {
@@ -14,7 +19,7 @@ class ImagesUploader < CarrierWave::Uploader::Base
   # バケット以下アイコンの保存先を指定します。
   # ~/[バケット名]/[foldername]　配下に画像がアップロードされます。
   def store_dir
-    "images"
+    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
 
   # アップロード可能な形式をここで指定します。
@@ -26,15 +31,15 @@ class ImagesUploader < CarrierWave::Uploader::Base
   # アップロード時のファイル名を指定します。
   # アップロードしたファイルを一意に認識
   def filename
-    if original_filename.present?
-      "#{model.id}_#{secure_token}.#{file.extension}"
-    end
+    return unless original_filename.present?
+    "#{Time.now.strftime('%Y%m%d_%H%M%S')}_#{secure_token}.#{file.extension}"
+    # "image.#{file.extension}"
   end
 
   protected
 
   def secure_token
     var = :"@#{mounted_as}_secure_token"
-    model.instance_variable_get(var) or model.instance_variable_set(var, SecureRandom.uuid)
+    model.instance_variable_get(var) || model.instance_variable_set(var, SecureRandom.uuid)
   end
 end
